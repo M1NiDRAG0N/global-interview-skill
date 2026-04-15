@@ -1,0 +1,12 @@
+# Claude Code local settings
+.claude/
+
+# Resume files (personal data - do not commit)
+*.pdf
+*.docx
+*.doc
+*.hwp
+
+# OS
+.DS_Store
+Thumbs.db
