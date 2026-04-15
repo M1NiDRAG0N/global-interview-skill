@@ -1,0 +1,28 @@
+{
+  "name": "global-interview-skill",
+  "version": "1.0.0",
+  "description": "Developer interview coaching MCP server with KR/JP/US multinational personas",
+  "type": "module",
+  "bin": {
+    "global-interview-skill": "./index.js"
+  },
+  "files": [
+    "index.js",
+    "prompts/system-prompt.md"
+  ],
+  "keywords": [
+    "interview",
+    "mcp",
+    "claude",
+    "ai",
+    "resume",
+    "developer",
+    "coaching"
+  ],
+  "author": "M1NiDRAG0N",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.10.2",
+    "zod": "^3.24.2"
+  }
+}

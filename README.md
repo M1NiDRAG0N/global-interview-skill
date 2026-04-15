@@ -9,7 +9,7 @@ A developer interview coaching AI skill with **Korean, Japanese, and American in
 
 | 모드 | 설명 |
 |------|------|
-| **A) 이력서 분석** | 6개 항목 점수화 (완성도·임팩트·가독성·키워드·직무연관·차별성) |
+| **A) 이력서 분석** | 신입/경력 기준으로 6개 항목 점수화 |
 | **B) 모의 면접** | 7가지 다국적 페르소나로 실전 면접 시뮬레이션 |
 | **C) 이력서 보완** | Before/After 형식의 항목별 개선 문구 제안 |
 | **D) 전체** | A → B → C 순서로 모두 진행 |
@@ -30,133 +30,101 @@ A developer interview coaching AI skill with **Korean, Japanese, and American in
 
 ---
 
-## 🚀 설치 및 사용 방법 / Installation & Usage
+## 🚀 설치 및 사용 방법
 
-### 1. Claude Code (권장)
+### 🖥️ 데스크탑 AI 에이전트 (MCP)
 
-Claude Code의 스킬 시스템을 활용하면 가장 강력하게 사용할 수 있습니다.
+Claude Desktop, Cursor, Windsurf 등 MCP를 지원하는 에이전트에서 사용합니다.
 
-**설치:**
+**설치 — 별도 설치 불필요, 아래 설정만 추가:**
+
+**Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_config.json`)
+```json
+{
+  "mcpServers": {
+    "interview-agent": {
+      "command": "npx",
+      "args": ["-y", "global-interview-skill"]
+    }
+  }
+}
+```
+
+**Cursor / Windsurf** (`.cursor/mcp.json` 또는 `.windsurf/mcp.json`)
+```json
+{
+  "mcpServers": {
+    "interview-agent": {
+      "command": "npx",
+      "args": ["-y", "global-interview-skill"]
+    }
+  }
+}
+```
+
+설정 후 AI 에이전트에서 `interview-agent` 프롬프트를 선택하거나 아래처럼 입력하면 됩니다:
+```
+면접 준비해줘 / 이력서 분석해줘 / 모의 면접 해줘
+```
+
+---
+
+### 🌐 웹 AI (Claude.ai / ChatGPT / Gemini)
+
+웹 환경은 MCP를 지원하지 않으므로 시스템 프롬프트를 직접 붙여넣어 사용합니다.
+
+**1단계 — 프롬프트 복사:**
 
 ```bash
-# 스킬 디렉터리로 복사
-cp -r skills/interview-agent ~/.claude/skills/
+# 터미널에서 바로 복사 (macOS)
+curl -s https://raw.githubusercontent.com/M1NiDRAG0N/global-interview-skill/master/prompts/system-prompt.md | pbcopy
 
-# Windows의 경우
-xcopy /E /I skills\interview-agent %USERPROFILE%\.claude\skills\interview-agent
+# Windows
+curl -s https://raw.githubusercontent.com/M1NiDRAG0N/global-interview-skill/master/prompts/system-prompt.md | clip
 ```
 
-또는 수동으로 `skills/interview-agent/SKILL.md` 파일을 `~/.claude/skills/interview-agent/SKILL.md` 경로에 복사하세요.
+또는 [system-prompt.md 직접 보기](https://github.com/M1NiDRAG0N/global-interview-skill/blob/master/prompts/system-prompt.md) → 내용 복사
 
-**사용:**
+**2단계 — AI에 붙여넣기:**
 
-Claude Code를 실행한 후, 이력서 파일(PDF, DOCX, MD, TXT)이 있는 폴더에서 아래 트리거 문구를 입력합니다.
-
-```
-면접 준비해줘
-이력서 분석해줘
-모의 면접 해줘
-이력서 보완해줘
-interview coach
-resume review
-```
+| AI | 방법 |
+|----|------|
+| **Claude.ai** | Projects → New Project → Instructions에 붙여넣기 |
+| **ChatGPT** | Explore GPTs → Create → Instructions에 붙여넣기 |
+| **Gemini** | 대화 첫 메시지에 붙여넣기 후 전송 |
 
 ---
 
-### 2. ChatGPT (Custom GPT / System Prompt)
+### ⚡ Claude Code (스킬 설치)
 
-**방법 A — Custom GPT 만들기:**
-1. [ChatGPT](https://chat.openai.com) → **Explore GPTs** → **Create**
-2. **Configure** 탭 → **Instructions** 항목에 `prompts/system-prompt.md` 내용을 붙여넣기
-3. 이력서 파일 업로드를 위해 **Capabilities → Code Interpreter & Data Analysis** 활성화
-4. 저장 후 사용
+```bash
+git clone https://github.com/M1NiDRAG0N/global-interview-skill.git
+cp -r global-interview-skill/skills/interview-agent ~/.claude/skills/
 
-**방법 B — 대화에서 바로 사용:**
-1. `prompts/system-prompt.md` 내용을 복사
-2. ChatGPT 새 대화에 붙여넣기
-3. 이력서 내용을 함께 붙여넣거나 파일 업로드 후 사용
-
----
-
-### 3. Claude.ai (Web)
-
-1. [claude.ai](https://claude.ai) 접속
-2. **Projects** → **New Project** 생성
-3. **Project Instructions**에 `prompts/system-prompt.md` 내용 붙여넣기
-4. 이후 해당 프로젝트에서 이력서 파일을 업로드하거나 내용을 붙여넣어 사용
-
----
-
-### 4. Gemini / Gemini Advanced
-
-1. [gemini.google.com](https://gemini.google.com) 접속
-2. `prompts/system-prompt.md` 내용을 첫 메시지에 붙여넣기 후 전송
-3. 이후 이력서 내용을 붙여넣거나 파일 업로드 후 사용
-
----
-
-### 5. Cursor / Windsurf / Continue (IDE AI)
-
-1. `.cursor/rules/` 또는 `.continue/rules/` 디렉터리 생성
-2. `prompts/system-prompt.md`를 해당 디렉터리에 복사
-3. IDE AI와 대화 시 인터뷰 에이전트로 동작
-
----
-
-### 6. API 직접 호출 (OpenAI / Anthropic / 기타)
-
-```python
-import anthropic
-
-with open("prompts/system-prompt.md", "r", encoding="utf-8") as f:
-    system_prompt = f.read()
-
-with open("my-resume.pdf", "rb") as f:
-    resume_content = f.read()  # PDF 파싱 별도 처리 필요
-
-client = anthropic.Anthropic()
-message = client.messages.create(
-    model="claude-opus-4-6",
-    max_tokens=4096,
-    system=system_prompt,
-    messages=[
-        {
-            "role": "user",
-            "content": "이력서 분석해줘\n\n[이력서 내용 붙여넣기]"
-        }
-    ]
-)
-print(message.content[0].text)
+# Windows
+xcopy /E /I global-interview-skill\skills\interview-agent %USERPROFILE%\.claude\skills\interview-agent
 ```
 
-```python
-# OpenAI 예시
-from openai import OpenAI
-
-client = OpenAI()
-response = client.chat.completions.create(
-    model="gpt-4o",
-    messages=[
-        {"role": "system", "content": open("prompts/system-prompt.md").read()},
-        {"role": "user", "content": "이력서 분석해줘\n\n[이력서 내용 붙여넣기]"}
-    ]
-)
-print(response.choices[0].message.content)
+설치 후 이력서 파일이 있는 폴더에서 트리거:
+```
+면접 준비해줘 / 이력서 분석해줘 / 모의 면접 해줘 / 이력서 보완해줘
 ```
 
 ---
 
-## 📁 파일 구조 / Repository Structure
+## 📁 파일 구조
 
 ```
 global-interview-skill/
-├── README.md                          # 이 파일
-├── LICENSE                            # MIT License
+├── index.js                           # MCP 서버 (데스크탑 AI용)
+├── package.json
+├── README.md
+├── LICENSE
 ├── skills/
 │   └── interview-agent/
-│       └── SKILL.md                   # Claude Code 전용 스킬 파일
+│       └── SKILL.md                   # Claude Code 전용 스킬
 └── prompts/
-    └── system-prompt.md               # 범용 시스템 프롬프트 (모든 AI 지원)
+    └── system-prompt.md               # 웹 AI용 시스템 프롬프트
 ```
 
 ---
