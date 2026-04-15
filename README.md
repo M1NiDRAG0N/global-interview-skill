@@ -30,84 +30,127 @@ A developer interview coaching AI skill with **Korean, Japanese, and American in
 
 ---
 
-## 🚀 설치 및 사용 방법
+## 🚀 설치 방법
 
-### 🖥️ 데스크탑 AI 에이전트 (MCP)
-
-Claude Desktop, Cursor, Windsurf 등 MCP를 지원하는 에이전트에서 사용합니다.
-
-**설치 — 별도 설치 불필요, 아래 설정만 추가:**
-
-**Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_config.json`)
-```json
-{
-  "mcpServers": {
-    "interview-agent": {
-      "command": "npx",
-      "args": ["-y", "global-interview-skill"]
-    }
-  }
-}
-```
-
-**Cursor / Windsurf** (`.cursor/mcp.json` 또는 `.windsurf/mcp.json`)
-```json
-{
-  "mcpServers": {
-    "interview-agent": {
-      "command": "npx",
-      "args": ["-y", "global-interview-skill"]
-    }
-  }
-}
-```
-
-설정 후 AI 에이전트에서 `interview-agent` 프롬프트를 선택하거나 아래처럼 입력하면 됩니다:
-```
-면접 준비해줘 / 이력서 분석해줘 / 모의 면접 해줘
-```
-
----
-
-### 🌐 웹 AI (Claude.ai / ChatGPT / Gemini)
-
-웹 환경은 MCP를 지원하지 않으므로 시스템 프롬프트를 직접 붙여넣어 사용합니다.
-
-**1단계 — 프롬프트 복사:**
-
-```bash
-# 터미널에서 바로 복사 (macOS)
-curl -s https://raw.githubusercontent.com/M1NiDRAG0N/global-interview-skill/master/prompts/system-prompt.md | pbcopy
-
-# Windows
-curl -s https://raw.githubusercontent.com/M1NiDRAG0N/global-interview-skill/master/prompts/system-prompt.md | clip
-```
-
-또는 [system-prompt.md 직접 보기](https://github.com/M1NiDRAG0N/global-interview-skill/blob/master/prompts/system-prompt.md) → 내용 복사
-
-**2단계 — AI에 붙여넣기:**
-
-| AI | 방법 |
-|----|------|
-| **Claude.ai** | Projects → New Project → Instructions에 붙여넣기 |
-| **ChatGPT** | Explore GPTs → Create → Instructions에 붙여넣기 |
-| **Gemini** | 대화 첫 메시지에 붙여넣기 후 전송 |
-
----
-
-### ⚡ Claude Code (스킬 설치)
+### 공통 — 먼저 clone
 
 ```bash
 git clone https://github.com/M1NiDRAG0N/global-interview-skill.git
-cp -r global-interview-skill/skills/interview-agent ~/.claude/skills/
+cd global-interview-skill
+```
+
+### 자동 설치 (권장)
+
+```bash
+# macOS / Linux
+bash install.sh
 
 # Windows
-xcopy /E /I global-interview-skill\skills\interview-agent %USERPROFILE%\.claude\skills\interview-agent
+./install.ps1
 ```
 
-설치 후 이력서 파일이 있는 폴더에서 트리거:
+설치할 AI를 선택하면 알아서 복사해줍니다:
+
+```
+1) Claude Code
+2) Gemini CLI
+3) Cursor
+4) Windsurf
+5) 전체 설치
+```
+
+---
+
+### 수동 설치
+
+#### ⚡ Claude Code
+
+```bash
+# macOS / Linux
+cp -r skills/claude-code ~/.claude/skills/interview-agent
+
+# Windows
+xcopy /E /I skills\claude-code %USERPROFILE%\.claude\skills\interview-agent
+```
+
+사용: 이력서 파일이 있는 폴더에서 `claude` 실행 후 트리거 입력
+
 ```
 면접 준비해줘 / 이력서 분석해줘 / 모의 면접 해줘 / 이력서 보완해줘
+```
+
+---
+
+#### 🔷 Gemini CLI
+
+clone한 폴더에 `GEMINI.md`가 이미 포함되어 있어서 **별도 설치 불필요**:
+
+```bash
+# 이력서 파일을 clone한 폴더에 복사 후
+gemini
+
+# 바로 입력
+면접 준비해줘
+```
+
+다른 프로젝트에서 사용하려면:
+
+```bash
+cp GEMINI.md /path/to/your/project/
+```
+
+---
+
+#### 🖱️ Cursor
+
+```bash
+# macOS / Linux (글로벌 룰)
+mkdir -p ~/.cursor/rules
+cp skills/cursor/interview-agent.md ~/.cursor/rules/
+
+# Windows
+mkdir %USERPROFILE%\.cursor\rules
+copy skills\cursor\interview-agent.md %USERPROFILE%\.cursor\rules\
+```
+
+또는 특정 프로젝트에만 적용:
+
+```bash
+mkdir -p .cursor/rules
+cp skills/cursor/interview-agent.md .cursor/rules/
+```
+
+---
+
+#### 🌊 Windsurf
+
+```bash
+# macOS / Linux (글로벌 룰)
+mkdir -p ~/.windsurf/rules
+cp skills/windsurf/interview-agent.md ~/.windsurf/rules/
+
+# Windows
+mkdir %USERPROFILE%\.windsurf\rules
+copy skills\windsurf\interview-agent.md %USERPROFILE%\.windsurf\rules\
+```
+
+---
+
+#### 🖥️ Claude Desktop / MCP 지원 에이전트
+
+`npx`로 MCP 서버를 실행합니다. 설정 파일에 추가:
+
+**Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_config.json`)
+
+```json
+{
+  "mcpServers": {
+    "interview-agent": {
+      "command": "npx",
+      "args": ["-y", "global-interview-skill"]
+    }
+  }
+}
 ```
 
 ---
@@ -116,15 +159,22 @@ xcopy /E /I global-interview-skill\skills\interview-agent %USERPROFILE%\.claude\
 
 ```
 global-interview-skill/
-├── index.js                           # MCP 서버 (데스크탑 AI용)
+├── install.sh                         # 자동 설치 (macOS/Linux)
+├── install.ps1                        # 자동 설치 (Windows)
+├── GEMINI.md                          # Gemini CLI용 (clone 후 바로 사용)
+├── index.js                           # MCP 서버 (Claude Desktop 등)
 ├── package.json
 ├── README.md
 ├── LICENSE
 ├── skills/
-│   └── interview-agent/
-│       └── SKILL.md                   # Claude Code 전용 스킬
+│   ├── claude-code/
+│   │   └── SKILL.md                   # Claude Code 전용 스킬
+│   ├── cursor/
+│   │   └── interview-agent.md         # Cursor 룰
+│   └── windsurf/
+│       └── interview-agent.md         # Windsurf 룰
 └── prompts/
-    └── system-prompt.md               # 웹 AI용 시스템 프롬프트
+    └── system-prompt.md               # 원본 프롬프트
 ```
 
 ---
